@@ -248,7 +248,7 @@ while True:
 
           choice = input("Choose a tool: ")
 
-          if choice == "6":
+          if choice == "0":
                print ("thanks for using sadia's IT toolkit")
                break
 

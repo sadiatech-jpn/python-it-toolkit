@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sadia's IT Toolkit — interactive IT support, networking and troubleshooting tools.">
+    <link rel="stylesheet" href="style.css">
+    <title>Sadia's IT Toolkit</title>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="hero">
+            <p class="hero-label">IT SUPPORT PROJECT</p>
+            <h1>Sadia's IT Toolkit</h1>
+            <p class="hero-description">A collection of interactive tools for IT support, networking and troubleshooting.</p>
+            <a href="https://github.com/sadiatech-jpn/python-it-toolkit" target="_blank" rel="noopener noreferrer" class="github-button">View on GitHub ↗</a>
+        </header>
+
+        <section class="tools" aria-label="IT toolkit">
+            <article class="tool-card">
+                <h2>🔌 Port Lookup</h2>
+                <p>Look up common network ports and their services.</p>
+                <input type="number" id="portInput" placeholder="Enter a port e.g. 443" min="0" max="65535">
+                <button type="button" onclick="lookupPort()">Lookup</button>
+                <p class="result" id="portResult" aria-live="polite"></p>
+            </article>
+
+            <article class="tool-card">
+                <h2>🌐 DNS Record Helper</h2>
+                <p>Learn what common DNS records are used for.</p>
+                <input type="text" id="dnsInput" placeholder="Enter A, AAAA, CNAME or MX">
+                <button type="button" onclick="lookupDNS()">Lookup</button>
+                <p class="result" id="dnsResult" aria-live="polite"></p>
+            </article>
+
+            <article class="tool-card">
+                <h2>💾 Bits & Bytes Converter</h2>
+                <p>Convert between bits, bytes, KB, MB and GB.</p>
+                <input type="number" id="convertInput" placeholder="Enter a number" min="0" step="any">
+                <select id="conversionType" aria-label="Conversion type">
+                    <option value="bits-bytes">Bits → Bytes</option>
+                    <option value="bytes-bits">Bytes → Bits</option>
+                    <option value="kb-mb">KB → MB</option>
+                    <option value="mb-gb">MB → GB</option>
+                    <option value="gb-mb">GB → MB</option>
+                </select>
+                <button type="button" onclick="convertData()">Convert</button>
+                <p class="result" id="convertResult" aria-live="polite"></p>
+            </article>
+
+            <article class="tool-card">
+                <h2>🔧 Troubleshooting Helper</h2>
+                <p>Get troubleshooting steps for common IT problems.</p>
+                <select id="problemType" aria-label="Problem type">
+                    <option value="internet">No Internet</option>
+                    <option value="slow">Slow Computer</option>
+                    <option value="display">No Display</option>
+                    <option value="wifi">Wi-Fi Network Not Showing</option>
+                </select>
+                <button type="button" onclick="troubleshoot()">Get Help</button>
+                <p class="result" id="troubleshootResult" aria-live="polite"></p>
+            </article>
+
+            <article class="tool-card">
+                <h2>📡 Networking Quick Reference</h2>
+                <p>Quick explanations of important networking concepts.</p>
+                <select id="networkTopic" aria-label="Networking topic">
+                    <option value="lanwan">LAN vs WAN</option>
+                    <option value="tcpudp">TCP vs UDP</option>
+                    <option value="ip">IPv4 vs IPv6</option>
+                    <option value="dnsdhcp">DNS vs DHCP</option>
+                    <option value="wifi">Wi-Fi Standards</option>
+                </select>
+                <button type="button" onclick="networkReference()">Show Info</button>
+                <p class="result" id="networkResult" aria-live="polite"></p>
+            </article>
+        </section>
+
+        <footer>
+            <p>Built with HTML, CSS and JavaScript • IT Support & Networking Project</p>
+        </footer>
+    </main>
+
+<script>
+const ports = {
+    "20": "FTP Data — Transfers FTP file data",
+    "21": "FTP — File Transfer Protocol control connection",
+    "22": "SSH — Secure remote access",
+    "23": "Telnet — Remote access (not secure)",
+    "25": "SMTP — Sends email",
+    "53": "DNS — Translates domain names into IP addresses",
+    "67": "DHCP Server — Assigns network configuration to clients",
+    "68": "DHCP Client — Receives network configuration from a DHCP server",
+    "80": "HTTP — Web traffic",
+    "110": "POP3 — Receives email",
+    "143": "IMAP — Accesses and manages email",
+    "389": "LDAP — Directory services",
+    "443": "HTTPS — Secure web traffic",
+    "445": "SMB — File and printer sharing",
+    "636": "LDAPS — Secure LDAP directory services",
+    "993": "IMAPS — Secure IMAP email access",
+    "995": "POP3S — Secure POP3 email retrieval",
+    "3389": "RDP — Remote Desktop Protocol"
+};
+
+function lookupPort() {
+    const port = document.getElementById("portInput").value.trim();
+    const result = document.getElementById("portResult");
+    result.textContent = ports[port] || "Port not found in the toolkit.";
+}
+
+function lookupDNS() {
+    const record = document.getElementById("dnsInput").value.trim().toUpperCase();
+    const result = document.getElementById("dnsResult");
+    const records = {
+        A: "A — Points a domain name to an IPv4 address",
+        AAAA: "AAAA — Points a domain name to an IPv6 address",
+        CNAME: "CNAME — Creates an alias for another domain name",
+        MX: "MX — Specifies the mail server responsible for receiving email"
+    };
+    result.textContent = records[record] || "DNS record not found. Try A, AAAA, CNAME or MX.";
+}
+
+function convertData() {
+    const number = parseFloat(document.getElementById("convertInput").value);
+    const type = document.getElementById("conversionType").value;
+    const result = document.getElementById("convertResult");
+
+    if (Number.isNaN(number) || number < 0) {
+        result.textContent = "Please enter a valid non-negative number.";
+        return;
+    }
+
+    const conversions = {
+        "bits-bytes": [number / 8, "Bytes"],
+        "bytes-bits": [number * 8, "Bits"],
+        "kb-mb": [number / 1024, "MB"],
+        "mb-gb": [number / 1024, "GB"],
+        "gb-mb": [number * 1024, "MB"]
+    };
+
+    const [value, unit] = conversions[type];
+    result.textContent = `${Number(value.toFixed(6))} ${unit}`;
+}
+
+function troubleshoot() {
+    const problem = document.getElementById("problemType").value;
+    const result = document.getElementById("troubleshootResult");
+    const guides = {
+        internet: ["Check Wi-Fi or Ethernet connection", "Check whether other devices have internet", "Restart the router/modem", "Restart the computer", "Check IP settings or run the network troubleshooter"],
+        slow: ["Restart the computer", "Close unnecessary programs", "Check available storage space", "Check Task Manager/Activity Monitor for heavy processes", "Install pending system updates"],
+        display: ["Check monitor power", "Check HDMI/DisplayPort cable", "Confirm the correct monitor input", "Try another cable or display port", "Restart the computer"],
+        wifi: ["Make sure Wi-Fi is enabled", "Turn Wi-Fi off and back on", "Check Airplane Mode", "Restart the router", "Restart the computer and reconnect to the network"]
+    };
+    result.innerHTML = guides[problem].map((step, i) => `${i + 1}. ${step}`).join("<br>");
+}
+
+function networkReference() {
+    const topic = document.getElementById("networkTopic").value;
+    const result = document.getElementById("networkResult");
+    const topics = {
+        lanwan: "<b>LAN:</b> Connects devices in a small local area, such as a home or office.<br><b>WAN:</b> Connects networks across larger geographic areas; the Internet is the biggest example.",
+        tcpudp: "<b>TCP:</b> Connection-oriented and reliable; checks that data arrives correctly.<br><b>UDP:</b> Connectionless and faster, but does not guarantee delivery.",
+        ip: "<b>IPv4:</b> 32-bit addressing, e.g. 192.168.1.1.<br><b>IPv6:</b> 128-bit addressing with a much larger address space.",
+        dnsdhcp: "<b>DNS:</b> Resolves domain names to IP addresses.<br><b>DHCP:</b> Automatically provides devices with IP configuration such as an IP address, gateway and DNS server.",
+        wifi: "<b>802.11n:</b> Wi-Fi 4 • 2.4/5 GHz<br><b>802.11ac:</b> Wi-Fi 5 • primarily 5 GHz<br><b>802.11ax:</b> Wi-Fi 6/6E • improved efficiency and performance"
+    };
+    result.innerHTML = topics[topic];
+}
+</script>
+</body>
+</html>
